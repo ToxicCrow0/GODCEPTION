@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#101d18"><title>GODCEPTION — NPC Crowd & Labels Fix V52.1</title><style>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#101d18"><title>GODCEPTION — Detailed JRPG Character Art V53</title><style>
 *{box-sizing:border-box}body{margin:0;background:#101d18;color:#e8f5df;font:14px system-ui,-apple-system,sans-serif}button,input{font:inherit}button{border:1px solid #547d60;background:#294938;color:#f2f8e8;border-radius:10px;padding:9px;cursor:pointer}button.active{background:#b9db82;color:#17271a}button:active{transform:scale(.97)}header{display:flex;align-items:center;justify-content:space-between;padding:12px;gap:5px;background:#193025}small,.muted{color:#b7cdb7;font-size:11px}.row{display:flex;gap:5px;align-items:center;flex-wrap:wrap}.stats{padding:7px 12px;background:#203b2e;font-size:12px;display:flex;gap:12px;flex-wrap:wrap}.tools{display:flex;overflow-x:auto;gap:6px;padding:9px;scrollbar-width:thin}.tools button{white-space:nowrap;flex-shrink:0}#map{width:100%;height:min(72vh,760px);min-height:420px;display:block;touch-action:none;background:#70915c}.controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:9px}.controls button{font-size:12px}.panel{margin:8px;padding:11px;background:#1d3729;border:1px solid #436d51;border-radius:10px;font-size:13px}.log{max-height:88px;overflow-y:auto}.log div{padding:3px 0;border-bottom:1px solid #35533f}.hidden{display:none}.panel button{margin:3px}.bar{width:100%;height:7px;border-radius:6px;background:#345443;overflow:hidden;margin:5px 0}.bar span{display:block;height:100%;background:#b5d879}#pop{position:fixed;z-index:5;inset:0;background:#0009;display:none;align-items:center;justify-content:center;padding:18px}#pop .inner{max-width:500px;width:100%;max-height:80dvh;overflow:auto;background:#1e3b2c;border:1px solid #84a58b;border-radius:16px;padding:17px;box-shadow:0 20px 50px #0009}#pop input{width:100%;padding:11px;border-radius:9px;background:#10241a;border:1px solid #65906d;color:white}footer{text-align:center;font-size:11px;color:#abc4ad;padding:8px 12px 24px}#notice{padding:6px 12px;font-size:12px;background:#2a4532}
 </style></head><body><header><div><b>🌍 GODCEPTION</b> <small>GODCEPTION · v50.1</small><div class="muted">Your world. Their discoveries.</div></div><div class="row"><b id="era">🪨 Stone Age</b><button id="speed">⏩ 5×</button></div></header><div class="stats" id="stats">Loading world…</div><div class="row" style="padding:7px 10px;justify-content:space-between"><span>🗺️ World camera</span><div class="row"><button id="zoomout">− Zoom out</button><button id="zoomin">+ Zoom in</button><button id="zoomfit">🌍 WHOLE CONTINENT</button><button id="zoomhome">🏘️ Village</button><button id="unpin" style="display:none">📍 Stop following</button></div></div><div class="row" style="justify-content:space-between;align-items:center;padding:5px 9px;gap:12px"><strong style="color:#e5d5a0">🌍 V25.2 LIVE MAP — 5,100 × 3,800</strong><span style="font-size:12px;color:#b2c6b8">Drag the main map to explore · Scroll to zoom · Tap citizens to inspect</span></div><canvas id="continentMini" width="360" height="150" style="display:block;width:min(100%,360px);height:150px;margin:7px auto;border:1px solid #90a57c;border-radius:8px;background:#39513e;cursor:crosshair;touch-action:manipulation"></canvas><canvas id="map"></canvas><div id="notice">👁️ You are invisible. Tap to observe or select a citizen. Manifest when ready.</div><div class="tools" id="tools"></div><div class="controls"><button id="people">👥 People</button><button id="judgment">⚡ Divine Judgment</button><button id="talk">💬 Talk</button><button id="gift">🍎 Gift</button><button id="bless">✨ Inspire</button><button id="days">⏩ +10 Days</button><button id="research">🔬 Experiments</button><button id="watch">👁️ Observe</button><button id="manifest">✨ Manifest</button><button id="vanish">🌫️ Ascend</button><button id="beliefs">🕯️ Beliefs</button><button id="tribes">⚔️ Tribes</button><button id="civilization">🏛️ Civilization</button><button id="magic">🔮 Magic</button><button id="empires">👑 Empires</button><button id="demo">🎮 Playtest</button><button id="history">📜 History</button><button id="voices">🗣️ Voices</button><button id="minds">🧠 Minds</button><button id="world">🌦️ World</button><button id="wonders">🌍 Wonders V49</button><button id="restart">↻ Restart</button></div><div class="panel" id="onboarding" style="border-color:#a1b97b"><div class="row" style="justify-content:space-between"><b>🎯 Creator challenges</b><button id="intro">❔ How to play</button></div><div id="objectives" class="muted">Loading challenges…</div></div><div class="panel"><b>📜 World history</b><div class="log" id="log"></div></div><div class="panel"><b>🧪 How discovery works</b><div class="muted">Citizens collect resources, then try experiments. Stone + wood → tools; tools + stone + wood → fire; fire + wood → shelters; then crops, villages, metal, trade, writing and laws. Tap ✨ Inspire to speed up experiments. No research-meter shortcuts. Beliefs, myths, cultures and conflicts grow from world events.</div></div><div class="panel"><b>🔬 Real experiments</b><div class="bar"><span id="progress"></span></div><div id="next" class="muted"></div></div><footer>Standalone single HTML game · Automatically saves on this browser · Simulation and experiments progress while open · No account required</footer><div id="pop"><div class="inner" id="popinner"></div></div>
 <script>
@@ -406,45 +406,55 @@ function initDivineV50(){s.divineBloodlines??={births:0};for(const p of s.people
 function divineFeatherV50(p){if(!p||p.sex!=='female'||p.age<18){say('🪶 Select an adult woman to receive the Divine Feather');return}if(p.divineFeather)return;p.divineFeather=true;p.divineDue=s.day+12;remember(p,'Chosen by the Creator to bear a demi-god');say('🪶 '+p.name+' received the Divine Feather');save()}
 function divineBirthV50(){for(const p of [...s.people]){if(!p.divineFeather||s.day<p.divineDue)continue;if(s.people.length>=120){p.divineDue=s.day+15;continue}p.divineFeather=false;const b=makePerson(['Astra','Elyra','Sol','Orion','Nyx','Seraph'][s.id%6]+' Starborn',p.x+12,p.y+8,[p.name,'The Creator']);b.age=0;b.sex=b.id%2?'male':'female';b.tribe=p.tribe;b.race=p.race;b.divine=true;b.divineTitle='Child of the Creator';b.genes=makeGenome(b.race,[p]);for(const k of geneKeys)b.genes[k]=clamp(b.genes[k]+Math.round(rand(3,6)),1,15);b.prestige=70;b.mutation='Starborn';b.generation=(p.generation||1)+1;s.people.push(b);s.divineBloodlines.births++;remember(p,'Gave birth to demi-god '+b.name);say('✨ DEMI-GOD BORN: '+b.name+', child of '+p.name+' and the Creator')}} 
 const npcSpriteCache=new Map();
+
+const npcSpriteV53Cache=new Map();
 function npcSprite(p,frame=0){
-const race=raceSpec(p.race),female=p.sex==='female',adult=p.age>=12,role=['Chief','King','Queen'].includes(p.job)?'royal':p.job==='Guard'?'guard':['Priest','Shaman'].includes(p.job)?'mage':p.job==='Miner'?'miner':'villager',id=(p.appearance?.hair||0)%6,outfit=(p.appearance?.outfit||0)%5,divine=!!p.divine;
-const key=[race.id,female,adult,role,id,outfit,divine,frame].join(':');if(npcSpriteCache.has(key))return npcSpriteCache.get(key);
-const c=document.createElement('canvas');c.width=32;c.height=48;const q=c.getContext('2d');q.imageSmoothingEnabled=false;
-const P=(x,y,w,h,color)=>{q.fillStyle=color;q.fillRect(x,y,w,h)};
-const skin=race.skin,sh='#38313d',hair=['#372937','#b3764e','#e7c387','#cecbd0','#8c4c51','#604a3d'][id],dye=['#6289a5','#ba778c','#638d75','#a88764','#8773a7'][outfit],cloth=role==='royal'?'#bd935d':role==='mage'?'#735fa3':role==='guard'?'#667d8e':dye;
-const shift=[0,1,0,-1][frame],feet=[0,2,0,-2][frame];
-// rear hair / cape silhouette
-if(female){P(9,8,14,22,sh);P(8,10,3,17,hair);P(21,10,3,18,hair);P(9,9,14,6,hair)}
-if(role==='mage'||role==='royal'){P(7,20,18,18,sh);P(8,22,16,16,role==='mage'?'#4b426e':'#72573f')}
-// shadow and legs
-P(7,42,19,3,'rgba(20,32,29,.26)');P(11+shift,36,4,6,sh);P(18-shift,36,4,6,sh);P(10+shift,40,6,3,'#55454a');P(17-shift,40,6,3,'#55454a');
-// figure silhouette, slender shoulders and clothing
-P(11,19,10,3,skin);P(female?10:8,21,female?12:16,13,sh);
-P(female?11:9,22,female?10:14,12,cloth);P(12,23,3,9,'rgba(255,255,255,.19)');
-P(8,24,3,9,skin);P(22,24,3,9,skin);
-if(female&&role!=='guard'){P(10,32,12,3,cloth);P(8,35,16,4,cloth);P(10,39,12,2,'#463c4f')}else{P(10,34,12,4,cloth);P(11,37,10,2,'#514858')}
-P(10,31,12,2,'#c9ae7d');
-if(role==='guard'){P(9,23,14,5,'#acb7c2');P(24,23,2,18,'#d8d4c7');P(23,19,4,5,'#e4e2d6')}
-if(role==='miner'){P(24,23,2,15,'#846245');P(22,22,7,3,'#b1b8bb')}
-// head outline + face
-P(11,10,10,12,sh);P(12,11,8,10,skin);P(10,13,2,6,skin);P(20,13,2,6,skin);
-if(female){P(10,9,12,5,hair);P(9,11,3,12,hair);P(21,11,3,13,hair);P(9,24,3,7,hair);P(21,24,3,7,hair);P(12,12,2,2,'rgba(255,255,255,.16)')}else{P(10,9,12,6,hair);P(11,10,11,2,hair)}
-if(['Elf','Goblin','Fae'].includes(race.id)){P(7,14,4,3,skin);P(21,14,4,3,skin)}
-if(race.id==='Unicorn'){P(15,3,2,9,'#f2e0a9');P(15,2,1,3,'#fff1d4')}
-if(race.id==='Dwarf'&&!female){P(12,20,8,6,'#8d5a3f');P(14,26,4,3,'#8d5a3f')}
-if(race.id==='Ogre'||race.id==='Troll'){P(11,20,3,3,'#e4d7b5');P(19,20,3,3,'#e4d7b5')}
-if(race.id==='Fae'){P(4,21,5,11,'#a7d4d4');P(23,21,5,11,'#a7d4d4');P(5,23,3,6,'#d5f1e3')}
-P(13,16,2,2,'#313849');P(18,16,2,2,'#313849');if(female){P(14,20,4,1,'#a86573');P(12,15,2,1,'#e9d0bc')}else P(15,20,3,1,'#785857');
-// accessories
-if(role==='royal'){P(10,7,12,3,'#ebc86e');P(11,3,3,5,'#e7c06d');P(15,2,3,6,'#f3d586');P(20,4,2,4,'#e7c06d')}
-if(role==='mage'){P(7,9,18,3,'#b6a0d8');P(13,3,6,7,'#6a4e91');P(15,5,2,2,'#e9d69f')}
-if(divine){P(15,0,3,3,'#f7e7a2');P(12,4,2,2,'#efc887');P(20,4,2,2,'#efc887')}
-npcSpriteCache.set(key,c);return c}
-function fantasyPixelNpc(p){let frame=Math.floor((Date.now()/225+(p.id||0)*.7)%4),sprite=npcSprite(p,frame),r=raceSpec(p.race),scale=p.age<12?.75:['Ogre','Troll'].includes(r.id)?1.45:['Fae','Dwarf','Goblin'].includes(r.id)?.85:1;
-ctx.save();ctx.translate(Math.round(p.x),Math.round(p.y));ctx.imageSmoothingEnabled=false;ctx.fillStyle='rgba(18,33,28,.22)';ctx.beginPath();ctx.ellipse(0,2,12*scale,4*scale,0,0,7);ctx.fill();ctx.drawImage(sprite,Math.round(-16*scale),Math.round(-44*scale),Math.round(32*scale),Math.round(48*scale));
-if(p.divine||p.divineFeather){ctx.fillStyle=p.divine?'#ffdf91':'#dcc0ff';ctx.fillRect(-2,-48*scale,4,4)}
-if(selected===p){ctx.strokeStyle='#ffe7a4';ctx.lineWidth=1;ctx.beginPath();ctx.ellipse(0,-18*scale,17*scale,26*scale,0,0,7);ctx.stroke()}
-ctx.restore()}
+const race=raceSpec(p.race),female=p.sex==='female',kid=p.age<12,role=['Chief','King','Queen'].includes(p.job)?'royal':p.job==='Guard'?'guard':['Priest','Shaman'].includes(p.job)?'mage':p.job==='Miner'?'miner':'villager';
+const hairIndex=(p.appearance?.hair||0)%6,outfit=(p.appearance?.outfit||0)%5,key=[race.id,female,kid,role,hairIndex,outfit,!!p.divine,frame].join('|');
+if(npcSpriteV53Cache.has(key))return npcSpriteV53Cache.get(key);
+let c=document.createElement('canvas');c.width=48;c.height=64;let q=c.getContext('2d');q.imageSmoothingEnabled=false;
+const P=(x,y,w,h,color)=>{q.fillStyle=color;q.fillRect(Math.round(x),Math.round(y),w,h)};
+const B=(x,y,w,h,border,fill)=>{P(x-1,y-1,w+2,h+2,border);P(x,y,w,h,fill)};
+let skin=race.skin||'#d8ae8b',hair=['#342735','#ba764d','#efcb89','#ccc4ce','#78454f','#524536'][hairIndex],highlight=['#684452','#e9ab6d','#fff0b5','#f8e9ed','#bc6e72','#90705b'][hairIndex],costume=['#4e8dba','#c46d93','#579580','#ca925e','#866cb3'][outfit];
+if(role==='guard')costume='#657e9d';if(role==='mage')costume='#7861ab';if(role==='royal')costume='#c28a64';
+let step=[-2,0,2,0][frame],swing=[2,0,-2,0][frame];
+P(13,57,24,3,'rgba(21,29,36,.18)');
+// rear hair: layered, shaped, asymmetric locks
+if(female){B(14,9,20,30,'#302635',hair);P(11,19,5,26,hair);P(32,17,6,27,hair);P(10,41,5,5,hair);P(33,41,5,5,hair);P(12,23,3,13,highlight);P(34,21,2,11,highlight)}
+if(role==='mage'||role==='royal'){B(13,32,22,22,'#3f324c',role==='mage'?'#55457b':'#785b49');P(14,48,4,6,'#322b48');P(31,48,3,6,'#322b48')}
+// boots and moving legs
+B(18+step,48,6,9,'#403543','#72575b');B(27-step,48,6,9,'#403543','#72575b');P(17+step,55,9,3,'#43363d');P(26-step,55,9,3,'#43363d');
+// sleeve silhouette and hands
+B(12,34+swing,7,15,'#392f40',costume);B(32,34-swing,7,15,'#392f40',costume);P(13,47+swing,5,5,skin);P(33,47-swing,5,5,skin);
+// torso tapered with collar and decorative seam
+B(female?18:17,32,female?14:16,16,'#383245',costume);
+P(22,33,5,5,'#f2e7d6');P(24,37,2,12,'#e4be83');P(18,43,14,2,'#cfaa70');
+if(female&&role!=='guard'){B(16,46,18,7,'#383245',costume);P(14,52,22,3,costume);P(18,48,2,7,'rgba(253,226,206,.28)');P(30,48,2,7,'rgba(55,37,76,.29)')}
+if(role==='guard'){P(17,34,16,8,'#a2b6c2');P(21,36,8,5,'#d4dce0');P(18,41,14,3,'#6b6775');P(39,31,2,23,'#c6c6c7');P(37,28,6,4,'#e1e6e6')}
+if(role==='miner'){P(39,31,2,22,'#876342');P(35,30,10,4,'#a7a9a5')}
+if(role==='mage'){P(16,34,3,18,'#d7c58c');P(32,34,2,18,'#d7c58c');P(39,27,2,27,'#a88863');P(37,24,6,7,'#b5daf1')}
+// rounded anime head, neck, temples, blush, face shadows
+P(22,29,6,6,skin);
+B(16,13,18,19,'#433440',skin);P(15,19,2,9,skin);P(34,19,2,9,skin);P(18,29,14,3,'#b88978');
+P(18,17,15,4,'rgba(255,239,213,.18)');P(17,23,2,4,'#d39a94');P(32,23,2,4,'#d39a94');
+P(20,23,4,3,'#39364a');P(28,23,4,3,'#39364a');P(20,23,2,1,'#fff7ec');P(28,23,2,1,'#fff7ec');
+P(23,29,4,1,female?'#a6596f':'#92655c');if(female){P(22,27,1,1,'#f3c2ac');P(30,27,1,1,'#f3c2ac')}
+// bangs with lifted hair volume and tapered fringe
+if(female){B(15,9,20,8,'#3d2b3b',hair);P(14,15,7,7,hair);P(27,14,8,6,hair);P(17,10,12,3,highlight);P(20,16,8,3,highlight);P(34,15,4,19,hair);P(11,17,5,20,hair);if(hairIndex%2){P(13,10,5,6,highlight);P(30,11,5,7,hair)}}
+else{B(16,10,18,8,'#392e3c',hair);P(14,15,7,6,hair);P(24,12,10,4,highlight);P(31,14,5,7,hair);if(hairIndex%2)P(17,8,12,4,hair)}
+if(['Elf','Goblin','Fae'].includes(race.id)){P(9,21,7,3,skin);P(34,21,7,3,skin);P(10,20,3,2,skin);P(38,20,3,2,skin)}
+if(race.id==='Dwarf'&&!female){P(18,31,15,8,'#9a634a');P(21,37,9,5,'#6f4a38')}
+if(['Ogre','Troll'].includes(race.id)){P(18,30,4,5,'#f3e2c6');P(30,30,4,5,'#f3e2c6')}
+if(race.id==='Unicorn'){P(23,2,4,11,'#f8e7aa');P(24,0,2,4,'#fff6d7')}
+if(race.id==='Fae'){P(5,31,8,17,'#a2dcd4');P(37,31,8,17,'#a2dcd4');P(7,34,4,10,'#e0f2e5');P(39,34,4,10,'#e0f2e5')}
+if(role==='royal'){P(16,8,18,4,'#e7bd6b');P(17,2,4,8,'#e7bd6b');P(23,0,5,10,'#f6d990');P(30,3,4,7,'#e7bd6b');P(24,4,2,3,'#e39c88')}
+if(role==='mage'){P(12,14,26,4,'#bfa4da');P(18,5,14,11,'#675190');P(23,1,5,6,'#675190');P(25,8,3,3,'#e5da9b')}
+if(p.divine){P(23,0,4,3,'#fff2aa');P(14,7,3,3,'#f5daa1');P(36,10,3,3,'#f5daa1')}
+npcSpriteV53Cache.set(key,c);return c}
+function fantasyPixelNpc(p){const frame=Math.floor((Date.now()/230+(p.id||0)*.7)%4),sprite=npcSprite(p,frame),r=raceSpec(p.race),scale=p.age<12?.57:['Ogre','Troll'].includes(r.id)?1.08:['Fae','Goblin','Dwarf'].includes(r.id)?.72:.85;
+ctx.save();ctx.translate(Math.round(p.x),Math.round(p.y));ctx.imageSmoothingEnabled=false;ctx.drawImage(sprite,Math.round(-24*scale),Math.round(-58*scale),Math.round(48*scale),Math.round(64*scale));
+if(p.divineFeather){ctx.fillStyle='#dfb8f3';ctx.fillRect(-2,-59*scale,4,4)}
+if(selected===p){ctx.strokeStyle='#f8dd95';ctx.lineWidth=1;ctx.beginPath();ctx.ellipse(0,-26*scale,20*scale,30*scale,0,0,7);ctx.stroke()}ctx.restore()}
 function fantasyGround(){ctx.save();for(let i=0;i<850;i++){let x=WORLD.left+(i*193.7)%(WORLD.right-WORLD.left),y=WORLD.top+(i*257.1)%(WORLD.bottom-WORLD.top);if(Math.abs(y-riverY(x))<40||y<mountainY(x)+151)continue;ctx.fillStyle=i%3?'rgba(38,87,45,.14)':'rgba(224,230,153,.16)';ctx.fillRect(Math.round(x/4)*4,Math.round(y/4)*4,4,4)}ctx.restore()}
 function fantasyBuilding(a){ctx.save();ctx.translate(a.x,a.y);ctx.scale(.78,.78);ctx.translate(-a.x,-a.y);drawIsometricBuilding(a);ctx.restore();if(['house','hut','market','school','fort','cityhall'].includes(a.t)){ctx.fillStyle='rgba(30,39,32,.13)';ctx.fillRect(a.x-8,a.y-5,16,2)}}
 
